@@ -26,13 +26,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b48fb662878e43d6b0a99ca0c1a8c24, type: 3}
   m_Name: RenderWithMaterial
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
   material:
     overrideState: 1
-    value: {fileID: 2100000, guid: 25435d20b534145198b6504ed75ea06f, type: 2}
+    value: {fileID: 2100000, guid: bd1ce0ee25c329846a139c0af2a66c92, type: 2}
   depthMode:
+    overrideState: 1
+    value: 1
+  gameModeOnly:
     overrideState: 1
     value: 1
