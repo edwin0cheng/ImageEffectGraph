@@ -313,7 +313,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 10
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -348,7 +348,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511465177}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.52406263, y: -1.22, z: -2.16}
+  m_LocalPosition: {x: 2.41, y: 6.95, z: -2.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -537,6 +537,8 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles:
+  - assemblyQualifiedName: UnityEngine.Rendering.PostProcessing.Blur, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - assemblyQualifiedName: ImageEffectGraph.PostProcessing.RenderWithMaterial, ImageEffectGraph,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - assemblyQualifiedName: ImageEffectGraph.Demo.MyOtherEffect, Assembly-CSharp, Version=0.0.0.0,
