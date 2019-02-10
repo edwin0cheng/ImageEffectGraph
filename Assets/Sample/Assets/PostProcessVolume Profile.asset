@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
   - {fileID: 114772218429231290}
-  - {fileID: 114718382881166806}
   - {fileID: 114783521254338724}
   - {fileID: 114521881425292898}
   - {fileID: 114624665517342020}
   - {fileID: 114128820281404296}
   - {fileID: 114403858743270546}
   - {fileID: 114241599801613914}
+  - {fileID: 114513355574556788}
 --- !u!114 &114128820281404296
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1344,7 +1344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
   m_Name: Grain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -1386,6 +1386,34 @@ MonoBehaviour:
   fastMode:
     overrideState: 0
     value: 0
+--- !u!114 &114513355574556788
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47c1fd8ec8fc51d48b6e6c636f1bc2ef, type: 3}
+  m_Name: Blur
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  Mode:
+    overrideState: 0
+    value: 0
+  Downsample:
+    overrideState: 0
+    value: 1
+  BlurIterations:
+    overrideState: 0
+    value: 1
+  BlurSize:
+    overrideState: 1
+    value: 0
 --- !u!114 &114521881425292898
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1398,7 +1426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1cb7e9e120078f43bce4f0b1be547a7, type: 3}
   m_Name: AmbientOcclusion
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -1519,7 +1547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b48fb662878e43d6b0a99ca0c1a8c24, type: 3}
   m_Name: RenderWithMaterial
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -1544,7 +1572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f848ec27aed44464493317be7fc364a6, type: 3}
   m_Name: LWRPAO
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
