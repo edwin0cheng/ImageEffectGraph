@@ -53,6 +53,9 @@ public class EdgeRTPassImpl : ScriptableRenderPass
 
     public override void Execute(ScriptableRenderer renderer, ScriptableRenderContext context, ref RenderingData renderingData)
     {
+        if(renderingData.cameraData.camera.cameraType != CameraType.Game)
+            return;
+        
         CommandBuffer cmd = CommandBufferPool.Get(k_PerObjectBloomTag);
         using (new ProfilingSample(cmd, k_PerObjectBloomTag))
         {

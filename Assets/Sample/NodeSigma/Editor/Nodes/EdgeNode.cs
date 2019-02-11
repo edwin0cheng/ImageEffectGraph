@@ -28,13 +28,17 @@ namespace NodeSigma.Nodes.Editor
             [Slot(2, Binding.None)] Texture2D DepthTexture,
             [Slot(3, Binding.None)] SamplerState DepthTextureState,
             [Slot(4, Binding.None)] Vector2 DepthTextureTexel,
-            [Slot(5, Binding.None)] out Vector4 Out)
+            [Slot(5, Binding.None, 2.0f, 0, 0, 0)] Vector1 SampleDistance,
+            [Slot(6, Binding.None, 10.0f, 0, 0, 0)] Vector1 Falloff,
+            [Slot(7, Binding.None, 0.82f, 0, 0, 0)] Vector1 SensitivityNormals,
+            [Slot(8, Binding.None, 3.75f, 0, 0, 0)] Vector1 SensitivityDepth,            
+            [Slot(9, Binding.None)] out Vector4 Out)
         {
             Out = Vector4.zero;
 
             return @"
 {
-    Out = nodesigma_edgecolor(ScreenPos, Color, DepthTexture, DepthTextureState, DepthTextureTexel);    
+    Out = nodesigma_edgecolor(ScreenPos, Color, DepthTexture, DepthTextureState, DepthTextureTexel, SampleDistance, Falloff, SensitivityNormals, SensitivityDepth);    
 }
 ";
         }
@@ -50,7 +54,8 @@ float ns_DecodeFloatRG( float2 enc )
 "));
 
             registry.ProvideFunction("nodesigma_CheckSame", s => s.Append(@"
-half nodesigma_CheckSame(half2 centerNormal, float centerDepth, half4 theSample)
+half nodesigma_CheckSame(half2 centerNormal, float centerDepth, half4 theSample, 
+    float sensitivityNormals, float sensitivityDepth)
 {
     float _SensitivityNormals = 0.82;
     // float _SensitivityNormals = 10.0;
@@ -59,14 +64,14 @@ half nodesigma_CheckSame(half2 centerNormal, float centerDepth, half4 theSample)
 
     // differene in normals
     // do not bother decoding normals - there's no need here
-    half2 diff = abs(centerNormal - theSample.xy) * _SensitivityNormals;
-    int isSameNormal = (diff.x + diff.y) * _SensitivityNormals < 0.1;
+    half2 diff = abs(centerNormal - theSample.xy) * sensitivityNormals;
+    int isSameNormal = (diff.x + diff.y) < 0.1;
 
     // differenece in depth
     float sampleDepth = ns_DecodeFloatRG(theSample.zw);
     float zdiff = abs(centerDepth - sampleDepth);
     // scale the requireed threshold by the distance
-    int isSameDepth = zdiff * _SensitivityDepth < 0.99 * centerDepth;
+    int isSameDepth = zdiff * sensitivityDepth < 0.99 * centerDepth;
 
     // return:
     // 1 - if normals and depth are similar enough
@@ -78,17 +83,16 @@ half nodesigma_CheckSame(half2 centerNormal, float centerDepth, half4 theSample)
 "));
 
             registry.ProvideFunction("nodesigma_edgecolor", s => s.Append(@"
-float4 nodesigma_edgecolor(float2 screenUV, float4 color, Texture2D depthTex, SamplerState depthTexState, float2 depthTexelSize)
+float4 nodesigma_edgecolor(float2 screenUV, float4 color, Texture2D depthTex, 
+    SamplerState depthTexState, float2 depthTexelSize, 
+    float sampleDistance, float falloff, float sensitivityNormals, float sensitivityDepth)
 {
-    float _SampleDistance = 2;
-    float _Falloff = 10.0;
-
     float sampleSizeX = depthTexelSize.x;
     float sampleSizeY = depthTexelSize.y;
-    float2 _uv2 = screenUV + float2(-sampleSizeX, +sampleSizeY) * _SampleDistance;
-    float2 _uv3 = screenUV + float2(+sampleSizeX, -sampleSizeY) * _SampleDistance;
-    float2 _uv4 = screenUV + float2( sampleSizeX,  sampleSizeY) * _SampleDistance;
-    float2 _uv5 = screenUV + float2(-sampleSizeX, -sampleSizeY) * _SampleDistance;
+    float2 _uv2 = screenUV + float2(-sampleSizeX, +sampleSizeY) * sampleDistance;
+    float2 _uv3 = screenUV + float2(+sampleSizeX, -sampleSizeY) * sampleDistance;
+    float2 _uv4 = screenUV + float2( sampleSizeX,  sampleSizeY) * sampleDistance;
+    float2 _uv5 = screenUV + float2(-sampleSizeX, -sampleSizeY) * sampleDistance;
 
     half4 center = SAMPLE_TEXTURE2D(depthTex, depthTexState, screenUV);
     half4 sample1 = SAMPLE_TEXTURE2D(depthTex, depthTexState, _uv2);
@@ -104,14 +108,14 @@ float4 nodesigma_edgecolor(float2 screenUV, float4 color, Texture2D depthTex, Sa
     float centerDepth = ns_DecodeFloatRG(center.zw);
 
     // // calculate how faded the edge is
-    float d = clamp(centerDepth * _Falloff - 0.05, 0.0, 1.0);    
+    float d = clamp(centerDepth * falloff - 0.05, 0.0, 1.0);    
     half4 depthFade = half4(d, d, d, 1.0);
 
     // is it an edge? 0 if yes, 1 if no    
-    edge *= nodesigma_CheckSame(centerNormal, centerDepth, sample1);
-    edge *= nodesigma_CheckSame(centerNormal, centerDepth, sample2);
-    edge *= nodesigma_CheckSame(centerNormal, centerDepth, sample3);
-    edge *= nodesigma_CheckSame(centerNormal, centerDepth, sample4);
+    edge *= nodesigma_CheckSame(centerNormal, centerDepth, sample1, sensitivityNormals, sensitivityDepth);
+    edge *= nodesigma_CheckSame(centerNormal, centerDepth, sample2, sensitivityNormals, sensitivityDepth);
+    edge *= nodesigma_CheckSame(centerNormal, centerDepth, sample3, sensitivityNormals, sensitivityDepth);
+    edge *= nodesigma_CheckSame(centerNormal, centerDepth, sample4, sensitivityNormals, sensitivityDepth);
 
     return edge * color + (1.0 - edge) * depthFade * color;
 }
