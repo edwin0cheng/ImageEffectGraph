@@ -1,0 +1,8 @@
+{
+    "name": "com.github.ibicha.image-effect-graph",
+    "displayName": "Image Effect Graph",
+    "version": "0.1.0",
+    "unity": "2018.3",
+    "description": "comhttps://github.com/iBicha/ImageEffectGraph",
+    "dependencies": { "com.unity.postprocessing": "2.1.3" }
+}
