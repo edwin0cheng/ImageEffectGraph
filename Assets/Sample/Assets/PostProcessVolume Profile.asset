@@ -1559,7 +1559,7 @@ MonoBehaviour:
     value: 1
   gameModeOnly:
     overrideState: 1
-    value: 1
+    value: 0
 --- !u!114 &114783521254338724
 MonoBehaviour:
   m_ObjectHideFlags: 3
