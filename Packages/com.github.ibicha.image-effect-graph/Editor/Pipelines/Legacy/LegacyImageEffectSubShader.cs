@@ -89,7 +89,7 @@ namespace ImageEffectGraph.Editor.Legacy
 
         static string GetTemplatePath(string templateName)
         {
-            var pathSegments = new[] { "Assets", "ImageEffectGraph", "Editor", "Pipelines", "Legacy", templateName };
+            var pathSegments = new[] { ImageEffectGraphPackageInfo.assetPackagePath, "Editor", "Pipelines", "Legacy", templateName };
             var path = pathSegments.Aggregate("", Path.Combine);
             if (!File.Exists(path))
                 throw new FileNotFoundException(string.Format(@"Cannot find a template with name ""{0}"".", templateName));

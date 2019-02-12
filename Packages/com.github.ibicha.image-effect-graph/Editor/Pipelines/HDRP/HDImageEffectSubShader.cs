@@ -7,10 +7,10 @@ using UnityEditor.ShaderGraph;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 
-namespace ImageEffectGraph.Editor.LightweightPipeline
+namespace ImageEffectGraph.Editor.HDPipeline
 {
     [Serializable]
-    public class LightWeightImageEffectSubShader : IImageEffectSubShader
+    public class HDImageEffectSubShader : IImageEffectSubShader
     {
         static readonly NeededCoordinateSpace k_PixelCoordinateSpace = NeededCoordinateSpace.None;
 
@@ -44,7 +44,7 @@ namespace ImageEffectGraph.Editor.LightweightPipeline
 //                sourceAssetDependencyPaths.Add(AssetDatabase.GUIDToAssetPath("3ef30c5c1d5fc412f88511ef5818b654"));
 //            }
 
-            var templatePath = GetTemplatePath("lightweightEffectPass.template");
+            var templatePath = GetTemplatePath("hdEffectPass.template");
 //            var extraPassesTemplatePath = GetTemplatePath("lightweightUnlitExtraPasses.template");
             if (!File.Exists(templatePath) /*|| !File.Exists(extraPassesTemplatePath)*/)
                 return string.Empty;
@@ -64,7 +64,7 @@ namespace ImageEffectGraph.Editor.LightweightPipeline
             subShader.AppendLine("SubShader");
             using (subShader.BlockScope())
             {
-                subShader.AppendLine("Tags{ \"RenderPipeline\" = \"LightweightPipeline\"}");
+                subShader.AppendLine("Tags{ \"RenderPipeline\" = \"HDRenderPipeline\"}");
 
 //                var materialTags = ShaderGenerator.BuildMaterialTags(imageEffectMasterNode.surfaceType);
 //                var tagsBuilder = new ShaderStringBuilder(0);
@@ -85,7 +85,7 @@ namespace ImageEffectGraph.Editor.LightweightPipeline
 
         public bool IsPipelineCompatible(RenderPipelineAsset renderPipelineAsset)
         {
-            const string RenderPipelineAssetName = "LightweightRenderPipelineAsset";
+            const string RenderPipelineAssetName = "HDRenderPipelineAsset";
             
             if (renderPipelineAsset == null)
                 return false;
@@ -98,7 +98,7 @@ namespace ImageEffectGraph.Editor.LightweightPipeline
 
         static string GetTemplatePath(string templateName)
         {
-            var pathSegments = new[] { "Assets", "ImageEffectGraph", "Editor", "Pipelines", "LWRP", templateName };
+            var pathSegments = new[] { ImageEffectGraphPackageInfo.assetPackagePath, "Editor", "Pipelines", "HDRP", templateName };
             var path = pathSegments.Aggregate("", Path.Combine);
             if (!File.Exists(path))
                 throw new FileNotFoundException(string.Format(@"Cannot find a template with name ""{0}"".", templateName));
